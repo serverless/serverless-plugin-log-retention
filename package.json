@@ -1,0 +1,27 @@
+{
+  "name": "serverless-plugin-log-retention",
+  "version": "1.0.0",
+  "description": "Control the retention of your function's cloudwatch logs.",
+  "main": "add-log-retention.js",
+  "scripts": {
+    "test": "nyc --reporter=lcov --reporter=text mocha"
+  },
+  "keywords": [
+    "serverless",
+    "plugin",
+    "log",
+    "retention"
+  ],
+  "author": "Jim Walkoski",
+  "license": "MIT",
+  "dependencies": {
+    "nco": "1.0.1",
+    "semver": "5.4.1"
+  },
+  "devDependencies": {
+    "chai": "4.1.2",
+    "mocha": "4.0.1",
+    "nyc": "11.3.0",
+    "sinon": "4.1.2"
+  }
+}
