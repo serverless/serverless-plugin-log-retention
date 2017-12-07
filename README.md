@@ -11,6 +11,9 @@ plugins:
   - serverless-plugin-log-retention
 
 provider:
+  name: aws
+
+custom:
   logRetentionInDays: 30 # used to set a global value for all functions
 
 functions:
