@@ -3,6 +3,7 @@
 const nco = require('nco');
 const semver = require('semver');
 
+//values from http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html
 const validRetentionInDays = [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653];
 
 class AwsAddLogRetention {
@@ -42,7 +43,7 @@ class AwsAddLogRetention {
       if(localLogRentationInDays === null && globalLogRetentionInDays === null) {
         return;
       }
-      const functionLogRetentionInDays = localLogRentationInDays === null ? globalLogRetentionInDays : sanitizeRetentionValue(localLogRentationInDays);
+      const functionLogRetentionInDays = localLogRentationInDays === null ? globalLogRetentionInDays : this.sanitizeRetentionValue(localLogRentationInDays);
       const logGroupLogicalId = this.provider.naming.getLogGroupLogicalId(functionName);
 
       const resource = {
@@ -57,8 +58,8 @@ class AwsAddLogRetention {
 
   beforeDeploy() {
     const service = this.serverless.service;
-    const globalLogRetentionInDays = service.provider && service.provider.logRetentionInDays
-      ? sanitizeRetentionValue(service.provider.logRetentionInDays)
+    const globalLogRetentionInDays = service.custom && service.custom.logRetentionInDays
+      ? this.sanitizeRetentionValue(service.custom.logRetentionInDays)
       : null;
     this.addLogRetentionForFunctions(globalLogRetentionInDays);
   }
