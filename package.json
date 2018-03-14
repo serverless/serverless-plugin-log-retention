@@ -1,18 +1,26 @@
 {
   "name": "serverless-plugin-log-retention",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Control the retention of your function's cloudwatch logs.",
   "main": "add-log-retention.js",
   "scripts": {
     "test": "nyc --reporter=lcov --reporter=text mocha"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtificerEntertainment/serverless-plugin-log-retention.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ArtificerEntertainment/serverless-plugin-log-retention/issues"
+  },
+  "homepage": "https://github.com/ArtificerEntertainment/serverless-plugin-log-retention",
   "keywords": [
     "serverless",
     "plugin",
     "log",
     "retention"
   ],
-  "author": "Jim Walkoski",
+  "author": "Artificer Entertainment",
   "license": "MIT",
   "dependencies": {
     "nco": "1.0.1",
