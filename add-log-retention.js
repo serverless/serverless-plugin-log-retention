@@ -16,7 +16,7 @@ class AwsAddLogRetention {
     this.options = options;
     this.provider = this.serverless.getProvider('aws');
     this.hooks = {
-      'before:deploy:createDeploymentArtifacts': this.beforeDeploy.bind(this),
+      'package:createDeploymentArtifacts': this.beforeDeploy.bind(this),
     };
   }
 

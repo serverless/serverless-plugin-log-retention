@@ -37,10 +37,10 @@ describe('serverless-plugin-log-retention', function() {
       const instance = createTestInstance();
       expect(instance)
         .to.have.property('hooks')
-        .that.has.all.keys('before:deploy:createDeploymentArtifacts');
+        .that.has.all.keys('package:createDeploymentArtifacts');
 
       const stub = sinon.stub(instance, 'addLogRetentionForFunctions');
-      instance.hooks['before:deploy:createDeploymentArtifacts']();
+      instance.hooks['package:createDeploymentArtifacts']();
 
       sinon.assert.calledOnce(stub);
     });
