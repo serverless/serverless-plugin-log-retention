@@ -35,7 +35,12 @@ class AwsAddLogRetention {
       return;
     }
 
-    const resources = nco(service.resources, {});
+
+    if(typeof service.resources !== 'object') {
+      service.resources = {};
+    }
+
+    const resources = service.resources;
     resources.Resources = nco(resources.Resources, {});
 
     Object.keys(service.functions).forEach(functionName => {

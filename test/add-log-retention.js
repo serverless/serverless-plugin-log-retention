@@ -44,6 +44,52 @@ describe('serverless-plugin-log-retention', function() {
 
       sinon.assert.calledOnce(stub);
     });
+
+    it('should create missing resources block', function() {
+      const instance = createTestInstance({
+        resources: undefined,
+        functions: {TestFunc: {logRetentionInDays: 30}}
+      });
+
+      expect(instance.serverless.service.resources)
+        .not.to.be.a('object');
+
+      instance.hooks['package:createDeploymentArtifacts']();
+
+      expect(instance.serverless.service.resources)
+        .to.have.property('Resources')
+        .that.have.property('TestFuncLogGroup')
+          .that.deep.equal({
+            Type: 'AWS::Logs::LogGroup',
+            Properties: {
+              RetentionInDays: 30
+            }
+          });
+    });
+
+    it('should update existing resources block', function() {
+      const instance = createTestInstance({
+        resources: {SampleRes: {}},
+        functions: {TestFunc: {logRetentionInDays: 30}}
+      });
+
+      expect(instance.serverless.service.resources)
+        .to.be.a('object')
+        .that.have.property('Resources')
+          .that.have.property('SampleRes');
+
+      instance.hooks['package:createDeploymentArtifacts']();
+
+      expect(instance.serverless.service.resources)
+        .to.have.property('Resources')
+        .that.have.property('TestFuncLogGroup')
+        .that.deep.equal({
+          Type: 'AWS::Logs::LogGroup',
+          Properties: {
+            RetentionInDays: 30
+          }
+        });
+    });
   })
 
 });
