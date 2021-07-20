@@ -15,6 +15,25 @@ class AwsAddLogRetention {
     this.serverless = serverless;
     this.options = options;
     this.provider = this.serverless.getProvider('aws');
+
+    // Add schema based validation of service config
+    const propertyDefinitions = {
+      properties: {
+        logRetentionInDays: { type: 'number' }
+      },
+      additionalProperties: false
+    };
+    if(this.serverless.configSchemaHandler.defineFunctionProperties) {
+      this.serverless.configSchemaHandler.defineFunctionProperties('aws', propertyDefinitions);
+    }
+
+    if(this.serverless.configSchemaHandler.defineCustomProperties) {
+      this.serverless.configSchemaHandler.defineCustomProperties({
+        type: 'object',
+        ...propertyDefinitions
+      });
+    }
+
     this.hooks = {
       'package:createDeploymentArtifacts': this.beforeDeploy.bind(this),
     };
