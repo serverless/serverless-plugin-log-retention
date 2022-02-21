@@ -11,6 +11,13 @@ class AwsAddLogRetention {
     if(!semver.satisfies(serverless.version, '>= 1.20.2')) {
       throw new Error('serverless-plugin-log-retention requires serverless 1.20.2 or higher');
     }
+    
+    // Add new property to functions
+    serverless.configSchemaHandler.defineFunctionProperties('aws', {
+      properties: {
+        logRetentionInDays: { type: 'number' },
+      },
+    });
 
     this.serverless = serverless;
     this.options = options;
