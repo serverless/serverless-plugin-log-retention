@@ -23,8 +23,8 @@
   "author": "Artificer Entertainment",
   "license": "MIT",
   "dependencies": {
-    "nco": "1.0.1",
-    "semver": "5.4.1"
+    "nco": "^1.0.1",
+    "semver": "^5.4.1"
   },
   "devDependencies": {
     "chai": "4.1.2",
