@@ -2,6 +2,7 @@
 
 const nco = require('nco');
 const semver = require('semver');
+const PLUGIN_NAME = 'serverless-plugin-log-retention';
 
 //values from http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html
 const validRetentionInDays = [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653];
@@ -15,6 +16,29 @@ class AwsAddLogRetention {
     this.serverless = serverless;
     this.options = options;
     this.provider = this.serverless.getProvider('aws');
+
+    // Add schema based validation of service config
+    const propertyDefinitions = {
+      properties: {
+        logRetentionInDays: { type: 'number' }
+      }
+    };
+    if(this.serverless.configSchemaHandler.defineFunctionProperties) {
+      this.serverless.configSchemaHandler.defineFunctionProperties('aws', propertyDefinitions);
+    }
+
+    if(this.serverless.configSchemaHandler.defineCustomProperties) {
+      this.serverless.configSchemaHandler.defineCustomProperties({
+        type: 'object',
+        properties: {
+          [PLUGIN_NAME] : {
+            type: 'object',
+            ...propertyDefinitions
+          }
+        }
+      });
+    }
+
     this.hooks = {
       'package:createDeploymentArtifacts': this.beforeDeploy.bind(this),
     };
@@ -58,8 +82,8 @@ class AwsAddLogRetention {
 
   beforeDeploy() {
     const service = this.serverless.service;
-    const globalLogRetentionInDays = service.custom && service.custom.logRetentionInDays
-      ? this.sanitizeRetentionValue(service.custom.logRetentionInDays)
+    const globalLogRetentionInDays = service.custom && service.custom[PLUGIN_NAME] && service.custom[PLUGIN_NAME].logRetentionInDays
+      ? this.sanitizeRetentionValue(service.custom[PLUGIN_NAME].logRetentionInDays)
       : null;
     this.addLogRetentionForFunctions(globalLogRetentionInDays);
   }
